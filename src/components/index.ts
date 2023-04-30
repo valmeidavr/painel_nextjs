@@ -1,2 +1,2 @@
 export { Layout } from './layout'
-export { CadastroUsuarios } from './usuarios'
+export { CadastroUsuarios, ListaUsuarios } from './usuarios'

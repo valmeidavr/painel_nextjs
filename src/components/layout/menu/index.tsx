@@ -5,14 +5,12 @@ export const Menu: React.FC = () => {
         <div className="menu">
             <hr style={{backgroundColor: 'rgb(200, 200, 200)', marginBottom: '-10px'}}/>
                 <ul className="list-unstyled d-flex flex-column" style={{marginLeft: '-10px'}}>
-
                     <MenuItem imgsrc='/assets/images/dash.svg' href='#' label='Home'/>
                     <MenuItem imgsrc='/assets/images/tv.svg' href='#' label=' Painel TV'/>
                     <MenuItem imgsrc='/assets/images/notificacao.svg' href='#' label='Chamador'/>
                     <MenuItem imgsrc='/assets/images/form.svg' href='#' label='Pacientes'/>
-                    <MenuItem imgsrc='/assets/images/users.svg' href='#' label='Usuários'/>
+                    <MenuItem imgsrc='/assets/images/users.svg' href='/usuarios/lista' label='Usuários'/>
                     <MenuItem imgsrc='/assets/images/logout.svg' href='#' label='Logout'/>
-   
                 </ul>
         </div>
     )
