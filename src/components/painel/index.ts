@@ -1,0 +1,1 @@
+export { PainelTV } from './tv'
