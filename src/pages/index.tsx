@@ -1,26 +1,44 @@
 import Head from 'next/head'
-import { Layout } from 'components';
 
 const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Painel Odontologia</title>
+        <title>Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Layout titulo="Home">
-        <div className="card p-4 shadow">
-            <div className="alert alert-primary" role="alert">
-              <h4 className="alert-heading text-start"><img src="/assets/images/bell.svg"/> Painel de Chamados Odontologia <small style={{color: 'black'}}>versão: 1.0</small></h4>
-              <hr/>
-              <p className="mb-3">Gerencie salas, usuários, pacientes, acesso ao chamador e painel de TV.</p>  
-              <p className="mb-0"><b>Dúvidas?</b></p>
-              <p className="mb-0">Estamos à disposição no e-mail informatica@aapvr.com.br ou através do sistema <a href="https://solicitaweb.aapvr.com.br">solicita web.</a></p>
+        <main className="d-flex align-items-center justify-content-center">
+          <div className="container">
+              <div className="d-flex justify-content-center">
+                  <div className="d-flex flex-column align-items-center">
+                      <img className="img-fluid mb-4" src="assets/images/logo.png" width="120px"/>
+                      <form>
+                          <div className="form-row d-flex flex-column">
+                              <div className="form-group">
+                                  <input className="input_personalizado col-12 form-control" type="email" id="email" aria-describedby="email" placeholder="E-mail" required/>
+                              </div>
+                              <div className="form-group">
+                                  <input className="input_personalizado col-12" type="password" id="Senha" placeholder="Senha" required/>
+                              </div>
+                              <div className="form-group" style={{textAlign: 'end'}}>
+                                  <a href="esqueceuSenha.html"><small className="form-group">Esqueceu a senha?</small></a>
+                              </div>
+                              
+                          </div>
+                          <button className="btn-personalizado" type="submit">Entrar</button>
+                        </form>
+                  </div>
+              </div>
             </div>
-        </div>
-      </Layout>
+        </main>
+        <footer className="container-fluid">
+            <div className="row">
+                <div className="col-lg-12 d-flex justify-content-start mt-3">
+                    <img className="img-fluid" src="/assets/images/logo_rodape.png" width="250px"/>
+                </div>
+            </div>
+        </footer>    
     </>
   )
 }
