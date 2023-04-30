@@ -16,7 +16,7 @@ export const PainelTV: React.FC = () => {
             
             <div className="mx-5 my-3 border-1 card">
                 <div className="container-fluid panel">
-                    <h5>PACIENTE CHMADO</h5>
+                    <h5>PACIENTE CHAMADO</h5>
                     <h3>Nome do Paciente</h3>
                 </div>
                 <div className="container-fluid panel">
