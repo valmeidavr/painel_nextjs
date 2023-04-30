@@ -3,8 +3,8 @@ export const PainelTV: React.FC = () => {
         <>
             <nav id="header" className="container-fluid px-5 py-2 bg-blue">
                 <div className="row">
-                    <div className="col-sm">
-                        <img src="/assets/images/logo.png" alt="logo-aapvr"/>
+                    <div className="col-sm py-4">
+                        <img src="/assets/images/logo_rodape.png" alt="logo-aapvr"/>
                     </div>
                     <div className="col-sm d-flex align-items-center">
                         <h1>UNIDADE DE ODONTOLOGIA</h1>

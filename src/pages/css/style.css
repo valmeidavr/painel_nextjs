@@ -238,3 +238,42 @@ footer {
     color: white;
     height: 41px;
 }
+
+/* Painel */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+.bg-blue{
+    background-color: #2D4562;
+    color: #fff;
+}
+
+.bg-blue h1{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+}
+
+
+.card{
+    box-shadow: 1px 1px 5px #888888;
+}
+
+.panel{
+    margin: 10px;
+}
+
+.panel h5, .table th{
+    color: #2C2C54;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 25px;
+}
+
+
+.panel h3, .table td{
+    color: #058EDD;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    font-size: 40px;
+}
