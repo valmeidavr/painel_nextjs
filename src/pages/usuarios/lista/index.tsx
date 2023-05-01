@@ -30,7 +30,7 @@ const ListaUsuarios: NextPage<IPrivatePageProps> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout titulo="Cadastro de Usuários" email={props.email} perfil={props.types} sala={props.sala}>
+      <Layout titulo="Lista de Usuários" email={props.email} perfil={props.types} sala={props.sala}>
       <div className="container-fluid p-0">
                 <div className="d-flex justify-content-end">
                     <Link href='/usuarios/cadastro'>
