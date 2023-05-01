@@ -1,6 +1,20 @@
 import Head from 'next/head'
+import { http } from '@/util/http'; 
+import { FormEvent } from 'react';
+import { setCookie } from '@/util/cookies';
 
 const Home: React.FC = () => {
+  
+  async function onSubmit(event: FormEvent): Promise<void> {
+      event.preventDefault()
+      const email = (document.querySelector("#email") as HTMLInputElement).value;
+      const password = (document.querySelector("#password") as HTMLInputElement).value;
+      const {data} = await http.post("auth/login", { email, password });
+      /* console.log(data); */
+      setCookie("accessToken", data.accessToken);
+      
+  }
+
   return (
     <>
       <Head>
@@ -13,13 +27,13 @@ const Home: React.FC = () => {
               <div className="d-flex justify-content-center">
                   <div className="d-flex flex-column align-items-center">
                       <img className="img-fluid mb-4" src="assets/images/logo.png" width="120px"/>
-                      <form>
+                      <form method='POST' onSubmit={onSubmit}>
                           <div className="form-row d-flex flex-column">
                               <div className="form-group">
                                   <input className="input_personalizado col-12 form-control" type="email" id="email" aria-describedby="email" placeholder="E-mail" required/>
                               </div>
                               <div className="form-group">
-                                  <input className="input_personalizado col-12" type="password" id="Senha" placeholder="Senha" required/>
+                                  <input className="input_personalizado col-12" type="password" id="password" placeholder="Senha" required/>
                               </div>
                               <div className="form-group" style={{textAlign: 'end'}}>
                                   <a href="esqueceuSenha.html"><small className="form-group">Esqueceu a senha?</small></a>
