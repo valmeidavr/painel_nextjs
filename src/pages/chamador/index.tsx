@@ -37,7 +37,7 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
 
       function renderUsers() {
         return usuarios.map((usuario: IChamador, index) => {
-          return <TableItem ind={index} id={usuario.id} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data} update={updateItem} />
+          return <TableItem key={index} id={usuario.id} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data} update={updateItem} />
         })
       } 
 
@@ -97,9 +97,9 @@ export default Chamador;
 
 const TableItem: React.FC<IChamador> = (props: IChamador) => {
     return (
-        <tr key={props.ind} className={props.atendido ? 'table-success' : 'table-danger'}>
+        <tr className={props.atendido ? 'table-success' : 'table-danger'}>
             <th scope="row">{props.data}</th>
-            <td>{props.paciente} - {props.ind}</td>
+            <td>{props.paciente}</td>
             <td>{props.atendido ? 'Atendido' : 'Não atendido'}</td>
             <td>{props.atendido ? '' : (<button onClick={() => props.update(props.id)} type="button" className="btn btn-primary">Chamar Paciente</button>)}</td>
         </tr>
