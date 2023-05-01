@@ -20,7 +20,7 @@ const Dashboard: NextPage<IPrivatePageProps> = (props) => {
   useEffect(() => {
     async function list(): Promise<void> {
       try{
-        const dados = await http.get("/users");
+        const dados = await http.get("/users/all");
         await setUsuarios(dados.data);
         await setLoading(false);
       }catch(err : any){
@@ -46,7 +46,12 @@ const Dashboard: NextPage<IPrivatePageProps> = (props) => {
     const paciente = (document.querySelector("#paciente") as HTMLInputElement).value;
 
     try{
-      const {data} = await http.post("/painel", { profissional_id, atendido, paciente});   
+      const {data} = await http.post("/painel", { profissional_id, atendido, paciente});  
+      
+      /*  Zerar Campos */
+      (document.getElementById('paciente') as HTMLInputElement).value = ''; 
+      (document.getElementById('profissional_id') as HTMLInputElement).value = ''; 
+
       toast.success("Atendimento cadastrado.");
     } catch(err : any) {
         msgResponse(err.response.data.message); 
