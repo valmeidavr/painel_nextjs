@@ -3,7 +3,7 @@ import { http } from '@/util/http';
 import { FormEvent } from 'react';
 import { setCookie } from '@/util/cookies';
 import {useRouter} from 'next/router';
-import * as swal from 'sweetalert';
+import { toast } from 'react-toastify';
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -16,7 +16,7 @@ const Home: React.FC = () => {
         setCookie("accessToken", data.accessToken);
         router.push('/dashboard')
       }catch(err) {
-         console.log(err);
+         toast.error("Usuário e/ou senha inválido.");
       }
   }
 

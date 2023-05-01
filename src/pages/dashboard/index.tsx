@@ -3,17 +3,9 @@ import { Layout } from 'components';
 import { withAuth } from '@/hof/withAuth';
 import { http } from '@/util/http';
 import { NextPage } from 'next';
+import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
 
-
-interface PrivatePageProps {
-  name?: string;
-  email?: string,
-  types?: string,
-  sala?: string,
-  payload: any;
-}
-
-const Dashboard: NextPage<PrivatePageProps> = (props) => {
+const Dashboard: NextPage<IPrivatePageProps> = (props) => {
   return (
     <>
       <Head>
