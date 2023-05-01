@@ -5,7 +5,12 @@ import { http } from '@/util/http';
 import { NextPage } from 'next';
 import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
 
+
+
+
 const Dashboard: NextPage<IPrivatePageProps> = (props) => {
+  const usuarios = http.get("/users");
+
   return (
     <>
       <Head>
@@ -24,6 +29,36 @@ const Dashboard: NextPage<IPrivatePageProps> = (props) => {
               <p className="mb-0">Estamos à disposição no e-mail informatica@aapvr.com.br ou através do sistema <a href="https://solicitaweb.aapvr.com.br">solicita web.</a></p>
             </div>
         </div>
+
+        <div className="card p-4 shadow">
+                <form method='POST'>
+                    <div className="form-row">
+                        <div className="form-group col-md-10 col-lg-10">
+                        <label htmlFor="Nome">Nome do Paciente</label>
+                        <input type="text" name="name" className="form-control" id="name" required/>
+                        </div>
+                    </div>  
+      
+                    <div className="form-row">                     
+                        <div className="form-group col-md-12 col-lg-4">
+                            <label htmlFor="inputState">Profissional</label>
+                            <select id="types" className="form-control" name="types" required>
+                            <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
+                                <option value="Profissional"> Profissional </option>
+                                <option value="Secretaria"> Secretaria </option>
+                                <option value="Administrador"> Administrador </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="d-flex mt-4">
+                        <button type="reset" className="btn-personalizado-sec mr-3">Limpar</button>
+                        <button type="submit" className="btn-personalizado">Salvar</button>
+                    </div>
+            </form>
+        </div> 
+
+
       </Layout>
     </>
   )

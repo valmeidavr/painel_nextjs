@@ -263,7 +263,7 @@ footer {
     margin: 10px;
 }
 
-.panel h5, .table th{
+.panel h5, .panel .table th{
     color: #2C2C54;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -271,7 +271,7 @@ footer {
 }
 
 
-.panel h3, .table td{
+.panel h3, .panel .table td{
     color: #058EDD;
     font-family: 'Roboto', sans-serif;
     font-weight: 900;
