@@ -1,8 +1,52 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { http } from '@/util/http';
+import { IPainel } from '@/interfaces/IPainel';
 
+
+function playText(text) {
+  console.log(text)
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "pt-BR";
+  utterance.rate = 1.2;
+  window.speechSynthesis.speak(utterance);
+}
+
+function list() {
+  return http.get("painel/tv");
+}
 
 const PainelTV: NextPage = () => {
+  const [panelTv, setPanelTv] = useState();
+  const [isLoading, setLoading] = useState(true);
+  const router = useRouter();
+
+ 
+  useEffect(() => { 
+   
+    async function teste() {
+
+      const res = await list();
+      setLoading(false);
+      setPanelTv(res.data)
+        
+      const intervalId = setInterval(() => {
+        list().then((res) => {
+          playText(res.data[0]?.paciente)
+          setLoading(false);
+          setPanelTv(res.data)
+        });
+      }, 3000000); 
+
+      return () => clearInterval(intervalId);
+    }
+
+    teste() 
+    
+  }, []);
+
   return (
     <>
      <Head>
@@ -23,49 +67,50 @@ const PainelTV: NextPage = () => {
                 </div>
             </nav>
             
-            <div className="mx-5 my-3 border-1 card">
-                <div className="container-fluid panel">
-                    <h5>PACIENTE CHAMADO</h5>
-                    <h3>Nome do Paciente</h3>
+            {!isLoading && (
+                <>  
+                    <div className="mx-5 my-3 border-1 card">
+                    <div className="container-fluid panel">
+                        <h5>NOME DO PACIENTE</h5>
+                        <h3>{panelTv[0]?.paciente.toUpperCase()}</h3>
+                    </div>
+                    <div className="container-fluid panel">
+                        <h5>PROFISSIONAL</h5>
+                        <h3>{panelTv[0]?.profissional.toUpperCase()}</h3>
+                    </div>
+                    <div className="container-fluid panel">
+                        <h5>SALA</h5>
+                        <h3>{panelTv[0]?.sala.toUpperCase()}</h3>
+                    </div>
+                  </div>
+
+                  <div className="mx-5 my-3 border-1 card">
+                    <table className="table">
+                        <thead>
+                          <tr>
+                            <th scope="col-lg">Últimas Chamadas</th>
+                            <th scope="col-sm">Sala</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {panelTv.map((item, index) => {
+                            return index !== 0 && (
+                              <tr key={index}>
+                                <td>{item.paciente.toUpperCase()}</td>
+                                <td>{item.sala.toUpperCase()}</td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                    </table>
                 </div>
-                <div className="container-fluid panel">
-                    <h5>PROFISSIONAL</h5>
-                    <h3>Nome do Profissional</h3>
-                </div>
-                <div className="container-fluid panel">
-                    <h5>SALA</h5>
-                    <h3>01-B</h3>
-                </div>
-                
-                
-            </div>
-            <div className="mx-5 my-3 border-1 card">
-                <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col-lg">Últimas Chamadas</th>
-                        <th scope="col-sm">Sala</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Nome do Paciente</td>
-                        <td>01-B</td>
-                      </tr>
-                      <tr>
-                        <td>Nome do Paciente</td>
-                        <td>01-B</td>
-                      </tr>
-                      <tr>
-                        <td>Nome do Paciente</td>
-                        <td>01-B</td>
-                      </tr>
-                    </tbody>
-                </table>
-            </div>
+                </>
+             )
+            }          
     </>
   )
 }
+
 
 export default PainelTV;
 
