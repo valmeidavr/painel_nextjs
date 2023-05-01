@@ -65,7 +65,7 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
                         <div className="form-group col-md-12 col-lg-4">
                             <label htmlFor="inputState">Perfil</label>
                             <select id="types" className="form-control" name="types" required>
-                            <option selected disabled  style={{ display: 'none'}}>Selecione...</option>
+                            <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
                                 <option value="Profissional"> Profissional </option>
                                 <option value="Secretaria"> Secretaria </option>
                                 <option value="Administrador"> Administrador </option>
@@ -77,7 +77,7 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
                         <div className="form-group col-md-12 col-lg-4">
                             <label htmlFor="inputState">Sala</label>
                             <select id="sala" className="form-control" name="sala" required>
-                            <option selected disabled  style={{ display: 'none'}}>Selecione...</option>
+                            <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
                                 <option value="Nenhuma"> Nenhuma </option>
                                 <option value="Sala 01"> Sala 01 </option>
                                 <option value="Sala 02"> Sala 02 </option>
