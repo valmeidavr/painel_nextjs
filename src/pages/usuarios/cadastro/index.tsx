@@ -4,8 +4,32 @@ import { withAuth } from '@/hof/withAuth';
 import { http } from '@/util/http';
 import { NextPage } from 'next';
 import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
+import { FormEvent } from 'react';
+import {useRouter} from 'next/router';
+import { msgResponse } from '@/util/msg';
+import { toast } from 'react-toastify';
 
 const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
+    const router = useRouter();
+
+    async function onSubmit(event: FormEvent): Promise<void> {
+    event.preventDefault()
+    
+    const name = (document.querySelector("#name") as HTMLInputElement).value;
+    const email = (document.querySelector("#email") as HTMLInputElement).value;
+    const password = (document.querySelector("#password") as HTMLInputElement).value;
+    const types = (document.querySelector("#types") as HTMLInputElement).value;
+    const sala = (document.querySelector("#sala") as HTMLInputElement).value;
+    
+    try{
+      const {data} = await http.post("/users", { name, email, password, types, sala });
+      router.push('/usuarios/lista')
+      toast.success("Usuário cadastrado.");
+    } catch(err) {
+        await  msgResponse(err.response.data.message);
+    }
+}
+
   return (
     <>
       <Head>
@@ -16,7 +40,7 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
 
       <Layout titulo="Cadastro de Usuários" email={props.email} perfil={props.types} sala={props.sala}>
       <div className="card p-4 shadow">
-                <form>
+                <form method='POST' onSubmit={onSubmit}>
                     <div className="form-row">
                         <div className="form-group col-md-10 col-lg-10">
                         <label htmlFor="Nome">Nome Completo</label>
@@ -36,16 +60,30 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
                         <input type="password" name="password" className="form-control" id="password" required/>
                         </div>
                     </div>
-
-                        
+      
                     <div className="form-row">                     
                         <div className="form-group col-md-12 col-lg-4">
                             <label htmlFor="inputState">Perfil</label>
-                            <select id="inputState" className="form-control" name="perfil" required>
+                            <select id="types" className="form-control" name="types" required>
                             <option selected disabled  style={{ display: 'none'}}>Selecione...</option>
                                 <option value="Profissional"> Profissional </option>
                                 <option value="Secretaria"> Secretaria </option>
                                 <option value="Administrador"> Administrador </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="form-row">                     
+                        <div className="form-group col-md-12 col-lg-4">
+                            <label htmlFor="inputState">Sala</label>
+                            <select id="sala" className="form-control" name="sala" required>
+                            <option selected disabled  style={{ display: 'none'}}>Selecione...</option>
+                                <option value="Nenhuma"> Nenhuma </option>
+                                <option value="Sala 01"> Sala 01 </option>
+                                <option value="Sala 02"> Sala 02 </option>
+                                <option value="Sala 03"> Sala 03 </option>
+                                <option value="Sala 04"> Sala 04 </option>
+                                <option value="Sala 05"> Sala 05 </option>
                             </select>
                         </div>
                     </div>
