@@ -2,17 +2,22 @@ import Head from 'next/head'
 import { http } from '@/util/http'; 
 import { FormEvent } from 'react';
 import { setCookie } from '@/util/cookies';
+import {useRouter} from 'next/router';
+import * as swal from 'sweetalert';
 
 const Home: React.FC = () => {
-  
+  const router = useRouter();
   async function onSubmit(event: FormEvent): Promise<void> {
       event.preventDefault()
       const email = (document.querySelector("#email") as HTMLInputElement).value;
       const password = (document.querySelector("#password") as HTMLInputElement).value;
-      const {data} = await http.post("auth/login", { email, password });
-      /* console.log(data); */
-      setCookie("accessToken", data.accessToken);
-      
+      try{
+        const {data} = await http.post("auth/login", { email, password });
+        setCookie("accessToken", data.accessToken);
+        router.push('/dashboard')
+      }catch(err) {
+         console.log(err);
+      }
   }
 
   return (

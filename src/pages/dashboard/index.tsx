@@ -1,7 +1,19 @@
 import Head from 'next/head'
 import { Layout } from 'components';
+import { withAuth } from '@/hof/withAuth';
+import { http } from '@/util/http';
+import { NextPage } from 'next';
 
-const Dashboard: React.FC = () => {
+
+interface PrivatePageProps {
+  name?: string;
+  email?: string,
+  types?: string,
+  sala?: string,
+  payload: any;
+}
+
+const Dashboard: NextPage<PrivatePageProps> = (props) => {
   return (
     <>
       <Head>
@@ -10,7 +22,7 @@ const Dashboard: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout titulo="Dashboard">
+      <Layout titulo="Dashboard" email={props.email} perfil={props.types} sala={props.sala}>
         <div className="card p-4 shadow">
             <div className="alert alert-primary" role="alert">
               <h4 className="alert-heading text-start"><img src="/assets/images/bell.svg"/> Painel de Chamados Odontologia <small style={{color: 'black'}}>versão: 1.0</small></h4>
@@ -26,3 +38,16 @@ const Dashboard: React.FC = () => {
 }
 
 export default Dashboard;
+
+export const getServerSideProps = withAuth(
+  async (ctx: any, cookies: any, payload: any) => {
+    const { data } = await http.get("/auth/me", {
+      headers: {
+        Authorization: `Bearer ${cookies.accessToken}`,
+      },
+    });
+    return {
+      props: data,
+    };
+  }
+);

@@ -18,9 +18,12 @@
     "next": "13.3.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sweetalert": "^2.1.2",
+    "swr": "^2.1.5",
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@types/cookie": "^0.5.1",
     "@types/js-cookie": "^3.0.3",
     "js-cookie": "^3.0.5"
   }
