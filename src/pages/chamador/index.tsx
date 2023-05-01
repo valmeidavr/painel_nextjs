@@ -4,8 +4,37 @@ import { withAuth } from '@/hof/withAuth';
 import { http } from '@/util/http';
 import { NextPage } from 'next';
 import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
+import {IChamador} from 'interfaces/IChamador';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
 
 const Chamador: NextPage<IPrivatePageProps> = (props) => {
+    const [usuarios, setUsuarios] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    const router = useRouter();
+  
+    useEffect(() => {
+      async function list(): Promise<void> {
+        try{
+          const dados = await http.get("/painel");
+          await setUsuarios(dados.data);
+          await setLoading(false);
+        }catch(err){
+          if(err.response.status === 403) {
+            router.push('/negado')
+          } 
+        }
+      }
+      list()
+    }, [])
+
+    function renderUsers() {
+        return usuarios.map((usuario: IChamador) => {
+          return <TableItem id={usuario.id} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data.toLocaleString('pt-BR',) } />
+        })
+      } 
+
   return (
     <>
       <Head>
@@ -26,24 +55,7 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
                 </tr>
             </thead>
             <tbody>
-                <tr className="table-success" style={{textDecoration: 'line-through'}}>
-                <th scope="row">10:00</th>
-                <td>Vinicius de Oliveira Almeida</td>
-                <td>Atendido</td>
-                <td></td>
-                </tr>
-                <tr className="table-danger" >
-                <th scope="row">11:00</th>
-                <td>Jose Benedito de Assis</td>
-                <td>Não Atendido</td>
-                <td><button type="button" className="btn btn-primary">Chamar Paciente</button></td>
-                </tr>
-                <tr className="table-danger">
-                <th scope="row">12:00</th>
-                <td>Joao Ferreira Lopes</td>
-                <td>Não Atendido</td>
-                <td><button type="button" className="btn btn-primary">Chamar Paciente</button></td>
-                </tr>
+                {renderUsers()}
             </tbody>
             </table>
         </div>
@@ -57,6 +69,17 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
 }
 
 export default Chamador;
+
+const TableItem: React.FC<IChamador> = (props: IChamador) => {
+    return (
+        <tr className={props.atendido ? 'table-success' : 'table-danger'}>
+            <th scope="row">{props.data}</th>
+            <td>{props.paciente}</td>
+            <td>{props.atendido ? 'Atendido' : 'Não atendido'}</td>
+            <td>{props.atendido ? '' : (<button type="button" className="btn btn-primary">Chamar Paciente</button>)}</td>
+        </tr>
+    )
+}
 
 export const getServerSideProps = withAuth(
   async (ctx: any, cookies: any, payload: any) => {

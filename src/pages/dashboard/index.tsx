@@ -4,12 +4,54 @@ import { withAuth } from '@/hof/withAuth';
 import { http } from '@/util/http';
 import { NextPage } from 'next';
 import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
-
+import React, { useEffect, useState, FormEvent } from 'react';
+import { useRouter } from 'next/router';
+import { IOption } from '@/interfaces/IOption';
+import { toast } from 'react-toastify';
+import { msgResponse } from '@/util/msg';
 
 
 
 const Dashboard: NextPage<IPrivatePageProps> = (props) => {
-  const usuarios = http.get("/users");
+  const [usuarios, setUsuarios] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function list(): Promise<void> {
+      try{
+        const dados = await http.get("/users");
+        await setUsuarios(dados.data);
+        await setLoading(false);
+      }catch(err : any){
+        if(err.response.status === 403) {
+          router.push('/negado')
+        } 
+      }
+    }
+    list()
+  }, [])
+
+  function renderProfissionais() {
+    return usuarios.map((usuario: IOption) => {
+      return <option key={usuario.id} value={usuario.id}>{usuario.name}</option>
+    })
+  } 
+
+  async function onSubmit(event: FormEvent): Promise<void> {
+    event.preventDefault()
+    
+    const profissional_id = (document.querySelector("#profissional_id") as HTMLInputElement).value.toString();
+    const atendido = '0';
+    const paciente = (document.querySelector("#paciente") as HTMLInputElement).value;
+
+    try{
+      const {data} = await http.post("/painel", { profissional_id, atendido, paciente});   
+      toast.success("Atendimento cadastrado.");
+    } catch(err : any) {
+        msgResponse(err.response.data.message); 
+    }
+  }
 
   return (
     <>
@@ -31,22 +73,20 @@ const Dashboard: NextPage<IPrivatePageProps> = (props) => {
         </div>
 
         <div className="card p-4 shadow">
-                <form method='POST'>
+                <form method='POST' onSubmit={onSubmit}>
                     <div className="form-row">
                         <div className="form-group col-md-10 col-lg-10">
                         <label htmlFor="Nome">Nome do Paciente</label>
-                        <input type="text" name="name" className="form-control" id="name" required/>
+                        <input type="text" name="paciente" className="form-control" id="paciente" required/>
                         </div>
                     </div>  
       
                     <div className="form-row">                     
                         <div className="form-group col-md-12 col-lg-4">
                             <label htmlFor="inputState">Profissional</label>
-                            <select id="types" className="form-control" name="types" required>
-                            <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
-                                <option value="Profissional"> Profissional </option>
-                                <option value="Secretaria"> Secretaria </option>
-                                <option value="Administrador"> Administrador </option>
+                            <select id="profissional_id" className="form-control" name="profissional_id" required>
+                              <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
+                              {renderProfissionais()}
                             </select>
                         </div>
                     </div>
@@ -78,3 +118,4 @@ export const getServerSideProps = withAuth(
     };
   }
 );
+
