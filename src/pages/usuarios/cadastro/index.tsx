@@ -25,8 +25,8 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
       const {data} = await http.post("/users", { name, email, password, types, sala });
       router.push('/usuarios/lista')
       toast.success("Usuário cadastrado.");
-    } catch(err) {
-        await  msgResponse(err.response.data.message);
+    } catch(err:any) {
+        msgResponse(err.response.data.message);
     }
 }
 

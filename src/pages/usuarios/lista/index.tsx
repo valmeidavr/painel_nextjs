@@ -5,8 +5,23 @@ import { http } from '@/util/http';
 import { NextPage } from 'next';
 import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
 import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { link } from 'fs';
+
 
 const ListaUsuarios: NextPage<IPrivatePageProps> = (props) => {
+   const [usuarios, setUsuarios] = useState([]);
+   const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function list(): Promise<void> {
+        const dados = await http.get("/users");
+        await setUsuarios(dados.data);
+        await setLoading(false);
+    }
+    list()
+  }, [])
+  
   return (
     <>
       <Head>
@@ -36,24 +51,36 @@ const ListaUsuarios: NextPage<IPrivatePageProps> = (props) => {
                     </div>
                 </div>
             </div>
-            <p>100 Registros encontrados</p>
-            <div className="container-fluid p-0 d-flex flex-wrap list-card">
-                <ItemCard profile="Administrador" usuario="Vinicius de Oliveira Almeida" email="gvweb.solucoes@gmail.com"/>
-                <ItemCard profile="Administrador" usuario="Vinicius de Oliveira Almeida" email="gvweb.solucoes@gmail.com"/>
-                <ItemCard profile="Administrador" usuario="Vinicius de Oliveira Almeida" email="gvweb.solucoes@gmail.com"/>
-                <ItemCard profile="Administrador" usuario="Vinicius de Oliveira Almeida" email="gvweb.solucoes@gmail.com"/>
-                <ItemCard profile="Administrador" usuario="Vinicius de Oliveira Almeida" email="gvweb.solucoes@gmail.com"/>
-                <ItemCard profile="Administrador" usuario="Vinicius de Oliveira Almeida" email="gvweb.solucoes@gmail.com"/>
-            </div>
-
+            {isLoading ? (
+              <>
+                <p>Carregando...</p>
+              </>
+             ) : (
+              <>
+                <p> 
+                  {(usuarios.length > 0) && 
+                      <>Total de Usuários: {usuarios.length}</>
+                  }
+                </p>
+                <div className="container-fluid p-0 d-flex flex-wrap list-card">
+                  {usuarios.map((item:ItemCardProps, index) => ( 
+                      <React.Fragment key={index}>
+                        <ItemCard types={item.types} name={item.name} email={item.email} id={item.id} />
+                      </React.Fragment>
+                  ))}    
+                </div>
+              </>
+             )}
       </Layout>
     </>
   )
 }
 interface ItemCardProps {
-    usuario: string,
-    profile: string,
-    email: string
+    id: string,
+    name: string,
+    types: string,
+    email: string,
+    
  }
 
 const ItemCard: React.FC<ItemCardProps> = (props: ItemCardProps) => {
@@ -61,13 +88,13 @@ const ItemCard: React.FC<ItemCardProps> = (props: ItemCardProps) => {
         
             <div className="card usuario-card">
                 <div className="card-header d-flex justify-content-between align-items-center">
-                    {props.usuario}
-                    <a href="#"> <img src="/assets/images/trashCan.svg" width="15px" data-toggle="tooltip" title="Excluir registro"/> </a>
+                    {props.name}
+                    <Link href={'usuarios/edit/' + props.id} > <img src="/assets/images/trashCan.svg" width="15px" data-toggle="tooltip" title="Excluir registro"/> </Link>
                 </div>
                 <div className="card-body d-flex flex-column">
                     <div className="container d-flex">
                         <img src="/assets/images/security.svg" width="15px"/>
-                        <span>{props.profile}</span>
+                        <span>{props.types}</span>
                     </div>
                     <div className="container d-flex">
                         <img src="/assets/images/mail.svg" width="15px"/>
