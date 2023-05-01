@@ -65,7 +65,7 @@ const ListaUsuarios: NextPage<IPrivatePageProps> = (props) => {
                 <div className="container-fluid p-0 d-flex flex-wrap list-card">
                   {usuarios.map((item:ItemCardProps, index) => ( 
                       <React.Fragment key={index}>
-                        <ItemCard types={item.types} name={item.name} email={item.email} id={item.id} />
+                        <ItemCard types={item.types} name={item.name} email={item.email} id={item.id} sala={item.sala}/>
                       </React.Fragment>
                   ))}    
                 </div>
@@ -80,6 +80,7 @@ interface ItemCardProps {
     name: string,
     types: string,
     email: string,
+    sala: string
     
  }
 
@@ -92,6 +93,7 @@ const ItemCard: React.FC<ItemCardProps> = (props: ItemCardProps) => {
                     <Link href={'usuarios/edit/' + props.id} > <img src="/assets/images/trashCan.svg" width="15px" data-toggle="tooltip" title="Excluir registro"/> </Link>
                 </div>
                 <div className="card-body d-flex flex-column">
+                
                     <div className="container d-flex">
                         <img src="/assets/images/security.svg" width="15px"/>
                         <span>{props.types}</span>
@@ -100,6 +102,13 @@ const ItemCard: React.FC<ItemCardProps> = (props: ItemCardProps) => {
                         <img src="/assets/images/mail.svg" width="15px"/>
                         <span>{props.email}</span>
                     </div>
+                    {(props.types == 'Profissional') && 
+                    <div className="container d-flex">
+                        <img src="/assets/images/info.svg" width="15px"/>
+                        <span>{props.sala}</span>
+                    </div>
+                    }
+                    
                 </div>
             </div>
        
