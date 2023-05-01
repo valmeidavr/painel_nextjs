@@ -5,35 +5,58 @@ import { http } from '@/util/http';
 import { NextPage } from 'next';
 import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
 import {IChamador} from 'interfaces/IChamador';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 
 const Chamador: NextPage<IPrivatePageProps> = (props) => {
     const [usuarios, setUsuarios] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [msgAtualizar, setmsgAtualizar] = useState('Atualizar');
     const router = useRouter();
   
+
     useEffect(() => {
-      async function list(): Promise<void> {
-        try{
-          const dados = await http.get("/painel");
-          await setUsuarios(dados.data);
-          await setLoading(false);
-        }catch(err){
-          if(err.response.status === 403) {
-            router.push('/negado')
-          } 
-        }
-      }
       list()
     }, [])
 
-    function renderUsers() {
-        return usuarios.map((usuario: IChamador) => {
-          return <TableItem id={usuario.id} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data.toLocaleString('pt-BR',) } />
+    async function list(): Promise<void> {
+      try{
+        setmsgAtualizar('Aguarde...')
+        const dados = await http.get("/painel");
+        await setUsuarios(dados.data);
+        await setmsgAtualizar('Atualizar')
+      }catch(err){
+        await setLoading(false);
+        if(err.response.status === 403) {
+          router.push('/negado')
+        } 
+      }
+    }
+
+      function renderUsers() {
+        return usuarios.map((usuario: IChamador, index) => {
+          return <TableItem ind={index} id={usuario.id} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data} update={updateItem} />
         })
       } 
+
+      const updateList = async () => {
+          setLoading(true);
+          await list()
+          await toast.success("Lista atualizada.");
+          await setLoading(false);
+        } 
+      
+      async function updateItem(id: String):Promise<void> { 
+        const {data} = await http.put(`/painel/${id}`, { 
+              atendido: '1'
+         });
+         updateList();
+      }
+
+      
+
 
   return (
     <>
@@ -44,7 +67,9 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
       </Head>
 
       <Layout titulo="Chamador" email={props.email} perfil={props.types} sala={props.sala}>
+      <button className="btn_cadastrar" style={{border: 'solid #24C595 1px', paddingRight: '10px'}} onClick={() => updateList()} data-toggle="tooltip" data-placement="top" title="Clique para atualizar a lista!"><img src='/assets/images/clock.svg' width="30px"/> {msgAtualizar} </button>
         <div className="card p-4 shadow">
+        
         <table className="table">
             <thead className="thead-dark" style={{textAlign: 'start'}}> 
                 <tr>
@@ -72,11 +97,11 @@ export default Chamador;
 
 const TableItem: React.FC<IChamador> = (props: IChamador) => {
     return (
-        <tr className={props.atendido ? 'table-success' : 'table-danger'}>
+        <tr key={props.ind} className={props.atendido ? 'table-success' : 'table-danger'}>
             <th scope="row">{props.data}</th>
-            <td>{props.paciente}</td>
+            <td>{props.paciente} - {props.ind}</td>
             <td>{props.atendido ? 'Atendido' : 'Não atendido'}</td>
-            <td>{props.atendido ? '' : (<button type="button" className="btn btn-primary">Chamar Paciente</button>)}</td>
+            <td>{props.atendido ? '' : (<button onClick={() => props.update(props.id)} type="button" className="btn btn-primary">Chamar Paciente</button>)}</td>
         </tr>
     )
 }
