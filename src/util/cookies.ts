@@ -23,3 +23,7 @@ export function setCookie(
 export function getCookie(key: string){
     return Cookies.get(key);
 }
+
+export function delCookie():any {
+  Cookies.remove("accessToken");
+}

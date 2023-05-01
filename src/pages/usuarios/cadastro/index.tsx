@@ -22,11 +22,11 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
     const sala = (document.querySelector("#sala") as HTMLInputElement).value;
     
     try{
-      const {data} = await http.post("/users", { name, email, password, types, sala });
+      const {data} = await http.post("/users", { name, email, password, types, sala });   
       router.push('/usuarios/lista')
       toast.success("Usuário cadastrado.");
-    } catch(err:any) {
-        msgResponse(err.response.data.message);
+    } catch(err) {
+        msgResponse(err.response.data.message); 
     }
 }
 
@@ -107,6 +107,7 @@ export const getServerSideProps = withAuth(
         Authorization: `Bearer ${cookies.accessToken}`,
       },
     });
+    console.log(data)
     return {
       props: data,
     };

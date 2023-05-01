@@ -1,6 +1,13 @@
+import { delCookie } from '@/util/cookies'
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 
 export const Menu: React.FC = () => {
+    const router = useRouter();
+    const Logout = () => {
+        delCookie()
+        router.push('/')
+    }
     return (
         <div className="menu">
             <hr style={{backgroundColor: 'rgb(200, 200, 200)', marginBottom: '-10px'}}/>
@@ -10,7 +17,10 @@ export const Menu: React.FC = () => {
                     <MenuItem imgsrc='/assets/images/notificacao.svg' href='#' label='Chamador'/>
 {/*                     <MenuItem imgsrc='/assets/images/form.svg' href='#' label='Pacientes'/> */}
                     <MenuItem imgsrc='/assets/images/users.svg' href='/usuarios/lista' label='Usuários'/>
-                    <MenuItem imgsrc='/assets/images/logout.svg' href='/' label='Logout'/>
+                    <p onClick={() => Logout()} style={{color: 'white', cursor: 'pointer'}}>
+                        <img src='/assets/images/logout.svg' width="24px"/>
+                        Logout
+                    </p>
                 </ul>
         </div>
     )

@@ -7,17 +7,25 @@ import {IPrivatePageProps} from 'interfaces/IPrivatePageProps'
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { link } from 'fs';
+import { useRouter } from 'next/router';
 
 
 const ListaUsuarios: NextPage<IPrivatePageProps> = (props) => {
    const [usuarios, setUsuarios] = useState([]);
    const [isLoading, setLoading] = useState(true);
+   const router = useRouter();
 
   useEffect(() => {
     async function list(): Promise<void> {
+      try{
         const dados = await http.get("/users");
         await setUsuarios(dados.data);
         await setLoading(false);
+      }catch(err){
+        if(err.response.status === 403) {
+          router.push('/negado')
+        } 
+      }
     }
     list()
   }, [])
