@@ -8,6 +8,7 @@ export default function Document() {
         <Main />
         <NextScript />
       </body>
+      <script src="https://code.responsivevoice.org/responsivevoice.js?key=y7fqdSmT"></script>
     </Html>
   )
 }

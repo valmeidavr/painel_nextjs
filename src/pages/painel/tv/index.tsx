@@ -3,16 +3,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { http } from '@/util/http';
-import { IPainel } from '@/interfaces/IPainel';
-
-
-function playText(text:any) {
-  console.log(text)
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "pt-BR";
-  utterance.rate = 1.2;
-  window.speechSynthesis.speak(utterance);
-}
 
 function list() {
   return http.get("painel/tv");
@@ -22,26 +12,25 @@ const PainelTV: NextPage = () => {
   const [panelTv, setPanelTv] = useState();
   const [isLoading, setLoading] = useState(true);
   const router = useRouter();
+  var nome = '';
 
- 
+  async function chamador() {
+    const res = await list();
+    setLoading(false);
+    setPanelTv(res.data)
+    if (nome !== res.data[0]?.paciente) {
+      responsiveVoice.speak(res.data[0]?.paciente + ',' + res.data[0].sala,"Brazilian Portuguese Female"); 
+      nome = res.data[0]?.paciente;
+    } 
+  }
+
   useEffect(() => { 
-   
-    async function teste() {
+    chamador()
+    const interval = setInterval(() => {
+      chamador()
+    }, 10000);
 
-      const res = await list();
-      setLoading(false);
-      setPanelTv(res.data)
-        
-      const intervalId = setInterval(() => {
-        playText(res.data[0]?.paciente)
-        setLoading(false);
-        setPanelTv(res.data)
-      }, 3000000); 
-
-      return () => clearInterval(intervalId);
-    }
-
-    teste() 
+    return () => clearInterval(interval);
     
   }, []);
 
