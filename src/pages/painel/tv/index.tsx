@@ -33,11 +33,9 @@ const PainelTV: NextPage = () => {
       setPanelTv(res.data)
         
       const intervalId = setInterval(() => {
-        list().then((res) => {
-          playText(res.data[0]?.paciente)
-          setLoading(false);
-          setPanelTv(res.data)
-        });
+        playText(res.data[0]?.paciente)
+        setLoading(false);
+        setPanelTv(res.data)
       }, 3000000); 
 
       return () => clearInterval(intervalId);
