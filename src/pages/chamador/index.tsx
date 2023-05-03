@@ -27,7 +27,7 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
         const dados = await http.get("/painel");
         await setUsuarios(dados.data);
         await setmsgAtualizar('Atualizar')
-      }catch(err){
+      }catch(err:any){
         await setLoading(false);
         if(err.response.status === 403) {
           router.push('/negado')

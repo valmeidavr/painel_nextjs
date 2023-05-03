@@ -6,7 +6,7 @@ import { http } from '@/util/http';
 import { IPainel } from '@/interfaces/IPainel';
 
 
-function playText(text) {
+function playText(text:any) {
   console.log(text)
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "pt-BR";
