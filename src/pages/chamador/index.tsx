@@ -13,12 +13,19 @@ import { toast } from 'react-toastify';
 const Chamador: NextPage<IPrivatePageProps> = (props) => {
     const [usuarios, setUsuarios] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [isButtonDisabled, setisButtonDisabled] = useState(false);
+    const [isText, setIsTxt] = useState('Chamar Paciente');
     const [msgAtualizar, setmsgAtualizar] = useState('Atualizar');
     const router = useRouter();
   
 
     useEffect(() => {
       list()
+      const interval = setInterval(() => {
+      list()
+      }, 10000);
+  
+      return () => clearInterval(interval);
     }, [])
 
     async function list(): Promise<void> {
@@ -37,14 +44,14 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
 
       function renderUsers() {
         return usuarios.map((usuario: IChamador, index) => {
-          return <TableItem key={index} id={usuario.id} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data} update={updateItem} />
+          return <TableItem txt={isText} key={index} id={usuario.id} Btn={isButtonDisabled} paciente={usuario.paciente} atendido={usuario.atendido} data={usuario.data} update={updateItem} />
         })
       } 
 
       const updateList = async () => {
           setLoading(true);
           await list()
-          await toast.success("Lista atualizada.");
+          await toast.success("Paciente enviado para o Painel de TV.");
           await setLoading(false);
         } 
       
@@ -52,11 +59,19 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
         const {data} = await http.put(`/painel/${id}`, { 
               atendido: '1'
          });
-         updateList();
-      }
+        updateList(); 
+
+        setisButtonDisabled(true);
+        setIsTxt('Aguarde..')
+        console.log('chamou timeout')
+
+        setTimeout(() => {
+           setisButtonDisabled(false);
+           setIsTxt('Chamar Paciente')
+        }, 15000);
 
       
-
+      }
 
   return (
     <>
@@ -67,7 +82,7 @@ const Chamador: NextPage<IPrivatePageProps> = (props) => {
       </Head>
 
       <Layout titulo="Chamador" email={props.email} perfil={props.types} sala={props.sala}>
-      <button className="btn_cadastrar" style={{border: 'solid #24C595 1px', paddingRight: '10px'}} onClick={() => updateList()} data-toggle="tooltip" data-placement="top" title="Clique para atualizar a lista!"><img src='/assets/images/clock.svg' width="30px"/> {msgAtualizar} </button>
+      <button className="btn_cadastrar" style={{border: 'solid #24C595 1px', paddingRight: '10px'}} onClick={() => updateList()} data-toggle="tooltip" data-placement="top" title="Clique para atualizar a lista!"><img src='/assets/images/clock.svg' width="30px"/> {msgAtualizar}</button>
         <div className="card p-4 shadow">
         
         <table className="table">
@@ -101,7 +116,7 @@ const TableItem: React.FC<IChamador> = (props: IChamador) => {
             <th scope="row">{props.data}</th>
             <td>{props.paciente}</td>
             <td>{props.atendido ? 'Atendido' : 'Não atendido'}</td>
-            <td>{props.atendido ? '' : (<button onClick={() => props.update(props.id)} type="button" className="btn btn-primary">Chamar Paciente</button>)}</td>
+            <td>{props.atendido ? '' : (<button disabled={props.Btn} onClick={() => props.update(props.id)} type="button" className="btn btn-primary cpac">{props.txt}</button>)}</td>
         </tr>
     )
 }
