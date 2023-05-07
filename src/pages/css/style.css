@@ -239,10 +239,25 @@ footer {
     height: 41px;
 }
 
+
 /* Painel */
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
+@keyframes blink-animation {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  .blink-text {
+    animation: blink-animation 1s infinite;
+  }
+  
+  .stop-animation {
+    animation: none;
+  }
+  
 .bg-blue{
     background-color: #2D4562;
     color: #fff;

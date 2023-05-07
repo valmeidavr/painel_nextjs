@@ -3,31 +3,44 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { http } from '@/util/http';
+import classNames from 'classnames';
+
 
 function list() {
   return http.get("painel/tv");
 }
 
+
 const PainelTV: NextPage = () => {
   const [panelTv, setPanelTv] = useState();
+  const [isActive, setIsActive] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const router = useRouter();
   var nome = '';
 
-  async function chamador() {
+ async function chamador() {
     const res = await list();
     setLoading(false);
     setPanelTv(res.data)
-    if (nome !== res.data[0]?.paciente) {
-      responsiveVoice.speak(res.data[0]?.paciente + ',' + res.data[0].sala,"Brazilian Portuguese Female"); 
-      nome = res.data[0]?.paciente;
-    } 
+    if(res.data.length != '0') {
+      if (nome !== res.data[0]?.paciente) {
+        responsiveVoice.speak(res.data[0]?.paciente + ',' + res.data[0].sala,"Brazilian Portuguese Female"); 
+        responsiveVoice.speak(',' + res.data[0]?.paciente + ',' + res.data[0].sala,"Brazilian Portuguese Female"); 
+        nome = res.data[0]?.paciente;
+        setTimeout(() => {
+          setIsActive(true)
+          setIsActive(false)
+          console.log('Parando o pisca do painel');
+        }, 5000);
+
+      } 
+    }
   }
 
   useEffect(() => { 
     chamador()
     const interval = setInterval(() => {
-      chamador()
+    chamador()
     }, 10000);
 
     return () => clearInterval(interval);
@@ -56,16 +69,16 @@ const PainelTV: NextPage = () => {
             
             {!isLoading && (
                 <>  
-                    <div className="mx-5 my-3 border-1 card">
-                    <div className="container-fluid panel">
+                  <div className="mx-5 my-3 border-1 card">
+                    <div className={isActive ? 'container-fluid panel blink-text' : 'container-fluid panel'}>
                         <h5>NOME DO PACIENTE</h5>
                         <h3>{panelTv[0]?.paciente.toUpperCase()}</h3>
                     </div>
-                    <div className="container-fluid panel">
+                    <div className={isActive ? 'container-fluid panel blink-text' : 'container-fluid panel'}>
                         <h5>PROFISSIONAL</h5>
                         <h3>{panelTv[0]?.profissional.toUpperCase()}</h3>
                     </div>
-                    <div className="container-fluid panel">
+                    <div className={isActive ? 'container-fluid panel blink-text' : 'container-fluid panel'}>
                         <h5>SALA</h5>
                         <h3>{panelTv[0]?.sala.toUpperCase()}</h3>
                     </div>
@@ -90,7 +103,7 @@ const PainelTV: NextPage = () => {
                           })}
                         </tbody>
                     </table>
-                </div>
+                </div> 
                 </>
              )
             }          
