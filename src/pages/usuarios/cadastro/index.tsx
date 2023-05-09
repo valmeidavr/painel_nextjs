@@ -79,10 +79,10 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
                             <select id="sala" className="form-control" name="sala" required>
                             <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
                                 <option value="Nenhuma"> Nenhuma </option>
-                                <option value="sl221"> Sala 221 </option>
-                                <option value="sl226"> Sala 226 </option>
-                                <option value="sl228"> Sala 228 </option>
-                                <option value="sl234"> Sala 234 </option>
+                                <option value="Sala 221"> Sala 221 </option>
+                                <option value="Sala 226"> Sala 226 </option>
+                                <option value="Sala 228"> Sala 228 </option>
+                                <option value="Sala 234"> Sala 234 </option>
                             </select>
                         </div>
                     </div>
