@@ -11,6 +11,7 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
     return (
+        <>
         <div className="container-fluid">
             <div className="row main-layout">
                 <section className="col-2 menu_lateral">
@@ -26,7 +27,7 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
                 <section className="col-10">
                 <div className="row d-flex flex-column">
                     <div className="menu_topo d-flex justify-content-end">
-                        <div className="d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}} data-toggle="tooltip" data-placement="top" title="Clique para trocar de sala!">
+                        <div onClick={() => $('#trocaSala').modal('show')} className="d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}} data-toggle="tooltip" data-placement="top" title="Clique para trocar de sala!">
                             <small style={{ color: 'black', fontWeight: 'bold', fontSize: '12px'}}>LOCALIZAÇÃO: {props.sala?.toUpperCase()}</small>
                             <img src="/assets/images/change.svg" width="20px" style={{border: 'solid 1px', borderRadius: '4px', backgroundColor: '#2D4562'}} className="img-fluid mr-4 ml-1"/>
                         </div>
@@ -47,6 +48,26 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
             </section>
             </div>
         </div>
+        <div className="modal fade" id="trocaSala" tabIndex="-1" role="dialog" aria-labelledby="trocaSala" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModal">Alterar Sala</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div className="modal-body">
+                    Em construção!
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" className="btn btn-primary">Salvar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+       </>
     )
 }
 
