@@ -75,7 +75,6 @@ const CadastroUsuarios: NextPage<IPrivatePageProps> = (props) => {
 
                     <div className="form-row">                     
                         <div className="form-group col-md-12 col-lg-4">
-                            <label htmlFor="inputState">Sala</label>
                             <select id="sala" className="form-control" name="sala" required>
                             <option selected disabled value='' style={{ display: 'none'}}>Selecione...</option>
                                 <option value="Nenhuma"> Nenhuma </option>

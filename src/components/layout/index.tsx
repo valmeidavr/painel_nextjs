@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { FormEvent, ReactNode } from 'react'
 import { Menu } from './menu'
 
 interface LayoutProps {
@@ -10,6 +10,11 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
+
+    async function onSubmit(event: FormEvent): Promise<void> {
+        event.preventDefault()
+        alert('Em Construção');
+    }
     return (
         <>
         <div className="container-fluid">
@@ -57,17 +62,28 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div className="modal-body">
-                    Em construção!
-                </div>
-                <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" className="btn btn-primary">Salvar</button>
-                </div>
-                </div>
+                <form method='POST' onSubmit={onSubmit}>
+                            <div className="modal-body">
+                                
+                                        <select id="sala" className="form-control" name="sala" required>
+                                            <option value="Nenhuma"> Nenhuma </option>
+                                            <option value="Sala 221" selected={props.sala == 'Sala 221'}> Sala 221 </option>
+                                            <option value="Sala 226" selected={props.sala == 'Sala 226'}> Sala 226 </option>
+                                            <option value="Sala 228" selected={props.sala == 'Sala 238'}> Sala 228 </option>
+                                            <option value="Sala 234" selected={props.sala == 'Sala 234'}> Sala 234 </option>
+                                    </select>
+                                
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                <button type="submit" className="btn btn-primary">Salvar</button>
+
+                            </div>
+                </form>    
             </div>
         </div>
-       </>
-    )
+     </div>
+    </>
+  )
 }
 
