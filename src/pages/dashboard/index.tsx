@@ -66,7 +66,7 @@ const Dashboard: NextPage<IPrivatePageProps> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout titulo="Dashboard" email={props.email} perfil={props.types} sala={props.sala}>
+      <Layout titulo="Dashboard" id={props.id} email={props.email} perfil={props.types} sala={props.sala}>
         <div className="card p-4 shadow">
             <div className="alert alert-primary" role="alert">
               <h4 className="alert-heading text-start"><img src="/assets/images/bell.svg"/> Painel de Chamados Odontologia <small style={{color: 'black'}}>versão: 1.0</small></h4>

@@ -1,7 +1,12 @@
 import { FormEvent, ReactNode } from 'react'
 import { Menu } from './menu'
+import { http } from '@/util/http';
+import {useRouter} from 'next/router';
+import { msgResponse } from '@/util/msg';
+import { toast } from 'react-toastify';
 
 interface LayoutProps {
+    id?: string,
     email?: string,
     titulo?: string,
     perfil?: string,
@@ -10,10 +15,18 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
+    const router = useRouter();
 
     async function onSubmit(event: FormEvent): Promise<void> {
         event.preventDefault()
-        alert('Em Construção');
+        const sala = (document.querySelector("#sala") as HTMLInputElement).value;
+        try{
+            const {data} = await http.put(`users/${props.id}/trocasala`, { sala });   
+            router.push('/dashboard')
+            $('#trocaSala').modal('toggle')
+          } catch(err) {
+              msgResponse(err.response.data.message); 
+          }
     }
     return (
         <>
@@ -63,22 +76,19 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
                     </button>
                 </div>
                 <form method='POST' onSubmit={onSubmit}>
-                            <div className="modal-body">
-                                
-                                        <select id="sala" className="form-control" name="sala" required>
-                                            <option value="Nenhuma"> Nenhuma </option>
-                                            <option value="Sala 221" selected={props.sala == 'Sala 221'}> Sala 221 </option>
-                                            <option value="Sala 226" selected={props.sala == 'Sala 226'}> Sala 226 </option>
-                                            <option value="Sala 228" selected={props.sala == 'Sala 238'}> Sala 228 </option>
-                                            <option value="Sala 234" selected={props.sala == 'Sala 234'}> Sala 234 </option>
-                                    </select>
-                                
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                <button type="submit" className="btn btn-primary">Salvar</button>
-
-                            </div>
+                    <div className="modal-body">
+                        <select id="sala" className="form-control" name="sala" required>
+                            <option value="Nenhuma"> Nenhuma </option>
+                            <option value="Sala 221" selected={props.sala == 'Sala 221'}> Sala 221 </option>
+                            <option value="Sala 226" selected={props.sala == 'Sala 226'}> Sala 226 </option>
+                            <option value="Sala 228" selected={props.sala == 'Sala 238'}> Sala 228 </option>
+                            <option value="Sala 234" selected={props.sala == 'Sala 234'}> Sala 234 </option>
+                        </select>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" className="btn btn-primary">Salvar</button>
+                    </div>
                 </form>    
             </div>
         </div>
